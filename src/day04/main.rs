@@ -3,10 +3,10 @@ struct CleanRange { start: u32, end: u32}
 
 impl CleanRange {
     fn new(source: &str) -> CleanRange{
-        let parts = source.split_once("-").unwrap();
+        let (start_str, end_str) = source.split_once("-").unwrap();
         CleanRange{
-            start: parts.0.parse().unwrap(),
-            end: parts.1.parse().unwrap()
+            start: start_str.parse().unwrap(),
+            end: end_str.parse().unwrap()
         }
     }
 
@@ -37,7 +37,7 @@ fn main() {
 
 
     let contains_total = cleaning_ranges.iter()
-        .filter(|(elf1,elf2)| elf1.contains(&elf2) || elf1.contains(&elf2))
+        .filter(|(elf1,elf2)| elf1.contains(&elf2) || elf2.contains(&elf1))
         .count();
 
     println!("Part 1 Containing ranges: {}", contains_total);
