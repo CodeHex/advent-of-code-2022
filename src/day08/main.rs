@@ -1,29 +1,8 @@
 use std::fs;
 use std::collections::HashSet;
 
-struct Grid {
-    data: Vec<Vec<u8>>
-}
-
-impl Grid {
-    fn new<'a>(source: &'a str) -> Grid {
-        let data = source.lines()
-            .map(|line| line.chars()
-                .map(|x| x.to_digit(10).unwrap() as u8)
-                .collect())
-                .collect::<Vec<Vec<u8>>>();
-        Grid { data: data }
-    }
-
-    fn get(&self, x: usize, y: usize) -> u8 {
-        return self.data[y][x]
-    }
-}
-
 fn main() {
     let input_data = fs::read_to_string("src/day08/input.txt").unwrap();
-
-    let _ = Grid::new(&input_data);
 
     let grid = input_data.lines()
         .map(|line| line.chars()
