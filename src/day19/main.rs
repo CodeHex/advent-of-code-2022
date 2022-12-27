@@ -1,5 +1,7 @@
 use std::{fs, collections::HashSet};
 use regex::Regex;
+use rayon::prelude::*;
+use std::time::Instant;
 
 #[derive(Debug)]
 struct Blueprint {
@@ -119,10 +121,10 @@ impl OptState {
             next_states.insert(state);
         }
 
-        let dont_do_nothing = b.can_build_geode_robot(&self.ore, &self.obs);
+        let can_build_geode = b.can_build_geode_robot(&self.ore, &self.obs);
 
         // Or do nothing
-        if !dont_do_nothing {
+        if !can_build_geode {
             let state = self.add_ores();
             next_states.insert(state);
         }
@@ -161,19 +163,22 @@ fn main() {
         .map(|line| parse_line(line))
         .collect::<Vec<Blueprint>>();
 
-    let result = blueprints.iter()
+    let start = Instant::now();
+    let result = blueprints.par_iter()
         .map(|x| (x, optimize(x, 24)))
         .inspect(|(b, result)| println!("Blueprint {} complete - {}", b.idx, result))
         .map(|(b, result)| b.idx * result)
         .sum::<usize>();
+    let duration = start.elapsed();
 
-    println!("Part 1 - Quality level: {}", result);
+    println!("Part 1 - Quality level: {} ({} secs)", result, duration.as_secs_f32());
 
-    let result2 = blueprints.iter().take(3)
+    let start2 = Instant::now();
+    let result2 = blueprints.par_iter().take(3)
         .map(|x| (x, optimize(x, 32)))
         .inspect(|(b, result)| println!("Blueprint {} complete - {}", b.idx, result))
         .map(|(_, result)| result)
         .product::<usize>();
-
-    println!("Part 2 - Answer: {}", result2)
+    let duration2 = start2.elapsed();
+    println!("Part 2 - Answer: {} ({} secs)", result2, duration2.as_secs_f32())
 }
