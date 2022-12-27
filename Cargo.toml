@@ -7,6 +7,7 @@ edition = "2021"
 
 [dependencies]
 pathfinding = "4.1.1"
+rayon = "1.6.1"
 regex = "1.7.0"
 
 [[bin]]
@@ -92,3 +93,7 @@ path = "src/day20/main.rs"
 [[bin]]
 name = "day21"
 path = "src/day21/main.rs"
+
+[[bin]]
+name = "day22"
+path = "src/day22/main.rs"
